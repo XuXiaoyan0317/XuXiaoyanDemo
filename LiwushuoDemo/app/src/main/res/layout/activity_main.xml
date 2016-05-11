@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <FrameLayout
+        android:id="@+id/main_aty_replace"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <RadioGroup
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/main_aty_home_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_home"
+            android:text="@string/home_name"
+            android:textColor="@color/menu_name"
+            android:textSize="@dimen/menu_name"
+            />
+
+        <RadioButton
+            android:id="@+id/main_aty_select_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_select"
+            android:text="@string/select_name"
+            android:textColor="@color/menu_name"
+            android:textSize="@dimen/menu_name"
+            />
+
+        <RadioButton
+            android:id="@+id/main_aty_category_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_category"
+            android:text="@string/category_name"
+            android:textColor="@color/menu_name"
+            android:textSize="@dimen/menu_name"
+            />
+        <RadioButton
+            android:id="@+id/main_aty_profile_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:button="@null"
+            android:drawableTop="@drawable/selector_profile"
+            android:text="@string/profile_name"
+            android:textColor="@color/menu_name"
+            android:textSize="@dimen/menu_name"/>
+
+    </RadioGroup>
+
+
+
+
+</LinearLayout>

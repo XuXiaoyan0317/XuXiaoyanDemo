@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">LiwushuoDemo</string>
+
+    <string name="home_name">指南</string>
+    <string name="select_name">热门</string>
+    <string name="category_name">分类</string>
+    <string name="profile_name">我的</string>
+    <string name="title_content">热门</string>
+</resources>
