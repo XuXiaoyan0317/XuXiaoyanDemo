@@ -4,16 +4,23 @@ package com.lanou3g.liwushuodemo.home;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import com.lanou3g.liwushuodemo.Base.BaseFragment;
 import com.lanou3g.liwushuodemo.R;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.app.ActionBar.LayoutParams;
 
@@ -23,22 +30,17 @@ import android.app.ActionBar.LayoutParams;
 public class OmnibusFragment extends BaseFragment {
     private ViewPager viewPager;//放轮播图片的
     private ImagePlayAdapter playAdapter;//适配器
-    //用于小圆点图片
-    private List<ImageView> dotViewList;
-    //用于存放轮播效果图片
-    private List<ImageView> list;
-    //加载其他布局
-    private LayoutInflater inflater;
-    //存放小圆点的线性布局
-    private LinearLayout dotLayout;
-
-
+    private List<ImageView> dotViewList;//用于小圆点图片
+    private List<ImageView> list;//用于存放轮播效果图片
+    private LayoutInflater inflater;//加载其他布局
+    private LinearLayout dotLayout;//存放小圆点的线性布局
     private int currentItem = 0;//当前页面
     boolean isAutoPlay = true;//是否自动轮播
-
     private ScheduledExecutorService scheduledExecutorService;
-
-
+    private View playflater;
+    //开始添加横向的图片
+    private RecyclerView recyclerView;
+    private GalleryAdapter galleryAdapter;
     private Handler handler = new Handler() {
 
         @Override
@@ -60,12 +62,24 @@ public class OmnibusFragment extends BaseFragment {
 
     @Override
     protected void initView() {
+        recyclerView = bindView(R.id.omnibus_fragment_gallery_rv);
+        playflater =LayoutInflater.from(mContext).inflate(R.layout.item_palyer,null);
+
+
         inflater = LayoutInflater.from(mContext);
-        viewPager = bindView(R.id.home_omnibus_fragment_vp);
+        galleryAdapter = new GalleryAdapter(getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(galleryAdapter);
+        galleryAdapter.setPlayerView(playflater);
+        Log.d("哈哈哈",playflater+"");
+
+        viewPager = (ViewPager) playflater.findViewById(R.id.home_omnibus_fragment_vp);
         //小圆点的线性布局初始化
-        dotLayout = bindView(R.id.dotLayout);
+        dotLayout = (LinearLayout) playflater.findViewById(R.id.dotLayout);
         dotLayout.removeAllViews();
         initDot();
+        Log.d("快出来","%%%%%%%%");
 
         if (isAutoPlay) {
             startPlay();
@@ -77,16 +91,13 @@ public class OmnibusFragment extends BaseFragment {
         //放小圆点的集合
         dotViewList = new ArrayList<>();
         //这是给刚打开界面初始化三个小圆点,以后就不用了,就在viewpager的滑动监听中添加小圆点
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             //创建一个小圆点对象
             ImageView dotView = new ImageView(getContext());
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(new LayoutParams(
                     LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
             params.leftMargin = 15;//设置小圆点的外边距
             params.rightMargin = 15;
-
-            params.height = 40;//设置小圆点的大小
-            params.width = 40;
 
             if (i == 0) {
                 //每次打开程序都显示的是第一张轮播图
@@ -106,15 +117,18 @@ public class OmnibusFragment extends BaseFragment {
         ImageView img1 = (ImageView) inflater.inflate(R.layout.item_scroll_view, null);
         ImageView img2 = (ImageView) inflater.inflate(R.layout.item_scroll_view, null);
         ImageView img3 = (ImageView) inflater.inflate(R.layout.item_scroll_view, null);
+        ImageView img4 = (ImageView) inflater.inflate(R.layout.item_scroll_view, null);
         //设置图片内容
         img1.setBackgroundResource(R.mipmap.xxy03);
         img2.setBackgroundResource(R.mipmap.xxy15);
         img3.setBackgroundResource(R.mipmap.xxy10);
+        img4.setBackgroundResource(R.mipmap.xxy12);
         //向图片集合添加图片
         list = new ArrayList<>();
         list.add(img1);
         list.add(img2);
         list.add(img3);
+        list.add(img4);
         //初始化适配器
         playAdapter = new ImagePlayAdapter(getContext());
         //绑定适配器
@@ -125,11 +139,14 @@ public class OmnibusFragment extends BaseFragment {
         playAdapter.setList(list);
         //监听viewpager的状态
         viewPager.addOnPageChangeListener(new MyPageChangeListener());
+        Log.d("快出来2","%%%%%%%%");
+
 
     }
 
     @Override
     protected void initData() {
+
 
     }
 
@@ -140,7 +157,7 @@ public class OmnibusFragment extends BaseFragment {
         //每隔一段时间线程就发送一条空消息让适配器刷新页面
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         //根据他的参数说明，第一个参数是执行的任务，第二个参数是第一次执行的间隔，第三个参数是执行任务的周期；
-        scheduledExecutorService.scheduleAtFixedRate(new SlideShowTask(), 1, 3, TimeUnit.SECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(new SlideShowTask(), 1, 4, TimeUnit.SECONDS);
     }
 
     /**
@@ -154,7 +171,9 @@ public class OmnibusFragment extends BaseFragment {
             synchronized (viewPager) {
                 currentItem = (currentItem + 1) % list.size();
                 //发送空消息
-                handler.sendEmptyMessage(100);
+                if (isAutoPlay = true) {
+                    handler.sendEmptyMessage(100);
+                }
             }
         }
     }
@@ -181,7 +200,7 @@ public class OmnibusFragment extends BaseFragment {
                     System.out.println(" 界面切换中");
                     break;
                 case 0:// 滑动结束，即切换完毕或者加载完毕
-                    // 当前为最后一张，此时从右向左滑，则切换到第一张
+                    //当前为最后一张，此时从右向左滑，则切换到第一张
 
                     if (viewPager.getCurrentItem() == viewPager.getAdapter().getCount() - 1 && !isAutoPlay) {
                         viewPager.setCurrentItem(0);
