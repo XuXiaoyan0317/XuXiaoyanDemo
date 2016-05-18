@@ -7,43 +7,62 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.lanou3g.liwushuodemo.Bean.CellBean;
 import com.lanou3g.liwushuodemo.R;
 
+import java.util.List;
+
+import it.sephiroth.android.library.picasso.Picasso;
+
 /**
+ * 精选页适配器
  * Created by dllo on 16/5/13.
  */
-public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class OmnibusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     public static final int PLAYER_TYPE = 0;
     public static final int HEADER_TYPE = 1;
     public static final int CONTENT_TYPE = 2;
     public View playerView;
+    public View headerView;
+    private List<CellBean.DataBean.ItemsBean> cellBeans;
+
+    public void setCellBeans(List<CellBean.DataBean.ItemsBean> cellBeans) {
+        this.cellBeans = cellBeans;
+        Log.d("列表的现象"," "+cellBeans);
+        notifyDataSetChanged();
+    }
 
     public void setPlayerView(View playerView) {
         this.playerView = playerView;
 
-}
+    }
 
-    public GalleryAdapter(Context context) {
+    public void setHeaderView(View headerView) {
+        this.headerView = headerView;
+
+    }
+
+    public OmnibusAdapter(Context context) {
         this.context = context;
     }
 
 
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View headerView = LayoutInflater.from(context).inflate(R.layout.item_header, parent, false);
         View contentView = LayoutInflater.from(context).inflate(R.layout.item_omnibus, parent, false);
         if (viewType == PLAYER_TYPE) {
             PlayerViewHolder playerHolder = new PlayerViewHolder(playerView);
+
             return playerHolder;
         } else if (viewType == HEADER_TYPE) {
             HeaderViewHolder headerHolder = new HeaderViewHolder(headerView);
+            Log.d("头布局", "-----" + headerView);
             return headerHolder;
         } else if (viewType == CONTENT_TYPE) {
+            Log.d("测试1", "-----" );
             ContentViewHolder contentHolder = new ContentViewHolder(contentView);
             return contentHolder;
         } else {
@@ -56,29 +75,34 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemViewType(int position) {
         if (position == 0) {
             return PLAYER_TYPE;
-        } else if (position==1){
+        } else if (position == 1) {
             return HEADER_TYPE;
-        }else {
-            Log.d("怎么是你","-----");
+        } else {
             return CONTENT_TYPE;
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-       if (holder instanceof PlayerViewHolder) {
+        if (holder instanceof PlayerViewHolder) {
 
-       }else if (holder instanceof HeaderViewHolder) {
-            ((HeaderViewHolder) holder).tv.setText("hahahahaha");
+        } else if (holder instanceof HeaderViewHolder) {
+
         } else if (holder instanceof ContentViewHolder) {
-            ((ContentViewHolder) holder).iv.setImageResource(R.mipmap.xxy03);
+            Log.d("测试2", "-----" );
+            Picasso.with(context).load(cellBeans.get(position-2).getCover_image_url()).into(((ContentViewHolder) holder).iv);
+            ((ContentViewHolder) holder).tv.setText(cellBeans.get(position-2).getTitle());
+            Log.d("测试3", "-----" );
+
+
         }
+
 
     }
 
     @Override
     public int getItemCount() {
-        return 100;
+        return cellBeans==null?0:cellBeans.size()+2;
     }
 
     class PlayerViewHolder extends RecyclerView.ViewHolder {
@@ -90,20 +114,20 @@ public class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     class HeaderViewHolder extends RecyclerView.ViewHolder {
-        TextView tv;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
-            tv = (TextView) itemView.findViewById(R.id.omnibus_fragment_gallery_tv);
         }
     }
 
     class ContentViewHolder extends RecyclerView.ViewHolder {
         ImageView iv;
+        TextView  tv;
 
         public ContentViewHolder(View itemView) {
             super(itemView);
-            iv = (ImageView) itemView.findViewById(R.id.omnibus_fragment_gallery_iv);
+            iv = (ImageView) itemView.findViewById(R.id.omnibus_fragment_content_iv);
+            tv = (TextView) itemView.findViewById(R.id.omnibus_fragment_content_tv);
 
         }
     }

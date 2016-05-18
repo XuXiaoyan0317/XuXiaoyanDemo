@@ -12,12 +12,12 @@ import android.view.ViewGroup;
  * Created by dllo on 16/5/9.
  */
 public abstract class BaseFragment extends Fragment {
-    protected Context mContext;
+    protected Context context;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        mContext = context;
+        this.context = context;
     }
 
     @Nullable
@@ -26,7 +26,7 @@ public abstract class BaseFragment extends Fragment {
         return inflater.inflate(initLayout(),container,false);
 
     }
-
+    //加载布局
     protected abstract int initLayout();
 
     @Override
@@ -34,7 +34,7 @@ public abstract class BaseFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initView();
     }
-
+    //初始化组件
     protected abstract void initView();
 
     @Override
@@ -43,9 +43,9 @@ public abstract class BaseFragment extends Fragment {
         initData();
         
     }
-
+    //添加数据
     protected abstract void initData();
-
+    //用来初始化组件的
     protected <T extends View> T bindView(int id){
         return (T) getView().findViewById(id);
     }

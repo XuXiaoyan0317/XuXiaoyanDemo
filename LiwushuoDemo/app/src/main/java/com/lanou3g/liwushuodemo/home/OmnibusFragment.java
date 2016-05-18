@@ -1,6 +1,5 @@
 package com.lanou3g.liwushuodemo.home;
 
-
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
@@ -12,35 +11,53 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
+import com.lanou3g.liwushuodemo.Base.BannerBean;
 import com.lanou3g.liwushuodemo.Base.BaseFragment;
+import com.lanou3g.liwushuodemo.Bean.CellBean;
+import com.lanou3g.liwushuodemo.Bean.PlayerBean;
 import com.lanou3g.liwushuodemo.R;
+import com.lanou3g.liwushuodemo.volley.VolleySingle;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.app.ActionBar.LayoutParams;
 
 /**
+ * 精选页
  * Created by dllo on 16/5/11.
  */
 public class OmnibusFragment extends BaseFragment {
+    //可横向滑动的组件的创建
+    private RecyclerView headerRecyclerView;
+    private HeaderAdapter headerAdapter;
+
+    //轮播图
     private ViewPager viewPager;//放轮播图片的
     private ImagePlayAdapter playAdapter;//适配器
     private List<ImageView> dotViewList;//用于小圆点图片
-    private List<ImageView> list;//用于存放轮播效果图片
-    private LayoutInflater inflater;//加载其他布局
+    private List<PlayerBean.DataBean.BannersBean> imageBean;
+    private List<BannerBean.DataBean.SecondaryBannersBean> bannersBeen;
+    private List<CellBean.DataBean.ItemsBean> cellBean;
     private LinearLayout dotLayout;//存放小圆点的线性布局
     private int currentItem = 0;//当前页面
     boolean isAutoPlay = true;//是否自动轮播
     private ScheduledExecutorService scheduledExecutorService;
-    private View playflater;
-    //开始添加横向的图片
+
+    //添加了两个头布局的recycleView
+    private View playFlater;
+    private View headerFlater;
     private RecyclerView recyclerView;
-    private GalleryAdapter galleryAdapter;
+    private OmnibusAdapter omnibusAdapter;
+
+    //接收改变轮播图页面的消息
     private Handler handler = new Handler() {
 
         @Override
@@ -54,44 +71,126 @@ public class OmnibusFragment extends BaseFragment {
 
     };
 
-
+    //加载本页的布局 布局中只有一个recycleView
+    // recycleView里面有三个布局:一个轮播图viewpager,一个头布局recycleView
     @Override
     protected int initLayout() {
         return R.layout.fragment_omnibus;
     }
 
+    //初始化数据
     @Override
     protected void initView() {
-        recyclerView = bindView(R.id.omnibus_fragment_gallery_rv);
-        playflater =LayoutInflater.from(mContext).inflate(R.layout.item_palyer,null);
+        //最大的布局里面
+        recyclerView = bindView(R.id.omnibus_fragment_rv);
 
+        //轮播图的布局layout
+        playFlater = LayoutInflater.from(context).inflate(R.layout.item_omnibus_palyer, null);
 
-        inflater = LayoutInflater.from(mContext);
-        galleryAdapter = new GalleryAdapter(getContext());
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        //头布局的
+        headerFlater = LayoutInflater.from(context).inflate(R.layout.item_omnibus_header, null);
+        //头布局的recycleView初始化
+        headerRecyclerView = (RecyclerView) headerFlater.findViewById(R.id.omnibus_fragment_header_rv);
+        //头布局的适配器
+        headerAdapter = new HeaderAdapter(context);
+        //横向滑动
+        LinearLayoutManager manager = new LinearLayoutManager(context);
+        headerRecyclerView.setLayoutManager(manager);
+        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        //绑定适配器
+        //最大的适配器
+        omnibusAdapter = new OmnibusAdapter(context);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(galleryAdapter);
-        galleryAdapter.setPlayerView(playflater);
-        Log.d("哈哈哈",playflater+"");
 
-        viewPager = (ViewPager) playflater.findViewById(R.id.home_omnibus_fragment_vp);
+
+
+        viewPager = (ViewPager) playFlater.findViewById(R.id.omnibus_fragment_player_vp);
         //小圆点的线性布局初始化
-        dotLayout = (LinearLayout) playflater.findViewById(R.id.dotLayout);
+        dotLayout = (LinearLayout) playFlater.findViewById(R.id.dotLayout);
         dotLayout.removeAllViews();
         initDot();
-        Log.d("快出来","%%%%%%%%");
 
-        if (isAutoPlay) {
-            startPlay();
-        }
 
     }
 
     public void initDot() {
-        //放小圆点的集合
+        bannersBeen = new ArrayList<>();
+        imageBean = new ArrayList<>();
+        cellBean = new ArrayList<>();
+        VolleySingle.getInstance().getQueue();
+        VolleySingle.getInstance()._addRequest("http://api.liwushuo.com/v2/banners", new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }, PlayerBean.class, new Response.Listener<PlayerBean>() {
+            @Override
+            public void onResponse(PlayerBean response) {
+                imageBean = response.getData().getBanners();
+                initPlayer();
+            }
+        },"playerData");
+
+        VolleySingle.getInstance()._addRequest("http://api.liwushuo.com/v2/secondary_banners?gender=2&generation=1", new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }, BannerBean.class, new Response.Listener<BannerBean>() {
+            @Override
+            public void onResponse(BannerBean response) {
+                bannersBeen= response.getData().getSecondary_banners();
+                headerRecyclerView.setAdapter(headerAdapter);
+                headerAdapter.setBannersBeens(bannersBeen);
+
+
+            }
+        }, "bannerData");
+        VolleySingle.getInstance()._addRequest("http://api.liwushuo.com/v2/channels/103/items?limit=20&ad=2&gender=2&offset=0&generation=1", new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }, CellBean.class, new Response.Listener<CellBean>() {
+            @Override
+            public void onResponse(CellBean response) {
+               cellBean =  response.getData().getItems();
+                omnibusAdapter.setCellBeans(cellBean);
+                recyclerView.setAdapter(omnibusAdapter);
+                omnibusAdapter.setPlayerView(playFlater);
+                omnibusAdapter.setHeaderView(headerFlater);
+            }
+        },"cellData");
+
+    }
+
+
+
+
+
+
+    public void initPlayer(){
+
+        //初始化适配器
+        playAdapter = new ImagePlayAdapter(context);
+        //绑定适配器
+        viewPager.setAdapter(playAdapter);
+        //将当前的viewpager设置为0
+        viewPager.setCurrentItem(0);
+
+        //向适配器添加图片数据
+        playAdapter.setImageBean(imageBean);
+        //监听viewpager的状态
+        viewPager.addOnPageChangeListener(new MyPageChangeListener());
+        if (isAutoPlay) {
+            startPlay();
+        }
+        Log.d("快出来2", "%%%%%%%%");
         dotViewList = new ArrayList<>();
         //这是给刚打开界面初始化三个小圆点,以后就不用了,就在viewpager的滑动监听中添加小圆点
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < imageBean.size(); i++) {
             //创建一个小圆点对象
             ImageView dotView = new ImageView(getContext());
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(new LayoutParams(
@@ -113,36 +212,8 @@ public class OmnibusFragment extends BaseFragment {
             dotViewList.add(dotView);
             //上面是动态添加了三个小圆点
         }
-        //添加图片的布局
-        ImageView img1 = (ImageView) inflater.inflate(R.layout.item_scroll_view, null);
-        ImageView img2 = (ImageView) inflater.inflate(R.layout.item_scroll_view, null);
-        ImageView img3 = (ImageView) inflater.inflate(R.layout.item_scroll_view, null);
-        ImageView img4 = (ImageView) inflater.inflate(R.layout.item_scroll_view, null);
-        //设置图片内容
-        img1.setBackgroundResource(R.mipmap.xxy03);
-        img2.setBackgroundResource(R.mipmap.xxy15);
-        img3.setBackgroundResource(R.mipmap.xxy10);
-        img4.setBackgroundResource(R.mipmap.xxy12);
-        //向图片集合添加图片
-        list = new ArrayList<>();
-        list.add(img1);
-        list.add(img2);
-        list.add(img3);
-        list.add(img4);
-        //初始化适配器
-        playAdapter = new ImagePlayAdapter(getContext());
-        //绑定适配器
-        viewPager.setAdapter(playAdapter);
-        //将当前的viewpager设置为0
-        viewPager.setCurrentItem(0);
-        //向适配器添加图片数据
-        playAdapter.setList(list);
-        //监听viewpager的状态
-        viewPager.addOnPageChangeListener(new MyPageChangeListener());
-        Log.d("快出来2","%%%%%%%%");
-
-
     }
+
 
     @Override
     protected void initData() {
@@ -157,7 +228,8 @@ public class OmnibusFragment extends BaseFragment {
         //每隔一段时间线程就发送一条空消息让适配器刷新页面
         scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
         //根据他的参数说明，第一个参数是执行的任务，第二个参数是第一次执行的间隔，第三个参数是执行任务的周期；
-        scheduledExecutorService.scheduleAtFixedRate(new SlideShowTask(), 1, 4, TimeUnit.SECONDS);
+
+        scheduledExecutorService.scheduleAtFixedRate(new SlideShowTask(), 1, imageBean.size(), TimeUnit.SECONDS);
     }
 
     /**
@@ -169,7 +241,7 @@ public class OmnibusFragment extends BaseFragment {
         public void run() {
             // TODO Auto-generated method stub
             synchronized (viewPager) {
-                currentItem = (currentItem + 1) % list.size();
+                currentItem = (currentItem + 1) % imageBean.size();
                 //发送空消息
                 if (isAutoPlay = true) {
                     handler.sendEmptyMessage(100);
@@ -237,7 +309,14 @@ public class OmnibusFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void onDestroy() {
+        VolleySingle.getInstance().removeRequest("playerData");
+        VolleySingle.getInstance().removeRequest("bannerData");
+        VolleySingle.getInstance().removeRequest("cellData");
 
+        super.onDestroy();
+    }
 }
 
 

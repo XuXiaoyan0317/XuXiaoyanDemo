@@ -2,17 +2,12 @@ package com.lanou3g.liwushuodemo.select;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.lanou3g.liwushuodemo.Base.BaseFragment;
 import com.lanou3g.liwushuodemo.Bean.SelectBean;
 import com.lanou3g.liwushuodemo.R;
-import com.lanou3g.liwushuodemo.volley.RequestGson;
+import com.lanou3g.liwushuodemo.volley.VolleySingle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,26 +35,28 @@ public class SelectFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        RequestGson<SelectBean> requestGson = new RequestGson<>(Request.Method.GET,
-                "http://api.liwushuo.com/v2/items?limit=20&offset=0&gender=2&generation=1",
+        VolleySingle.getInstance().getQueue();
+        VolleySingle.getInstance()._addRequest("http://api.liwushuo.com/v2/items?limit=20&offset=0&gender=2&generation=1",
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
                     }
                 },SelectBean.class,new Response.Listener<SelectBean>(){
-            @Override
-            public void onResponse(SelectBean response) {
-               itemsBeens=new ArrayList<>();
-                itemsBeens=response.getData().getItems();
-                Log.d("daklj","dkasl"+itemsBeens);
-                recycleAdaper.setItemsBeens(itemsBeens);
+                    @Override
+                    public void onResponse(SelectBean response) {
+                        itemsBeens=new ArrayList<>();
+                        itemsBeens=response.getData().getItems();
+                        recycleAdaper.setItemsBeens(itemsBeens);
 
-            }
-        });
+                    }
+                },"selectData");
 
-        requestQueue.add(requestGson);
-        Log.d("hhhhh","dkasl"+itemsBeens);
+    }
+
+    @Override
+    public void onDestroy() {
+        VolleySingle.getInstance().removeRequest("selectData");
+        super.onDestroy();
     }
 }

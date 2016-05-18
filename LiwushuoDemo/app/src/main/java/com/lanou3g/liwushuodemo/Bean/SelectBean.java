@@ -4,6 +4,7 @@ package com.lanou3g.liwushuodemo.Bean;
 import java.util.List;
 
 /**
+ * 热门页的数据类
  * Created by dllo on 16/5/12.
  */
 public class SelectBean {

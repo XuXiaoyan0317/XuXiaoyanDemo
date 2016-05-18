@@ -3,50 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/slideView"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="160.0dp">-->
-
-        <!--<android.support.v4.view.ViewPager-->
-            <!--android:id="@+id/home_omnibus_fragment_vp"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--/>-->
-
-        <!--<LinearLayout-->
-            <!--android:id="@+id/dotLayout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentBottom="true"-->
-            <!--android:gravity="center"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:padding="8dp">-->
-
-            <!--<View-->
-                <!--android:id="@+id/v_dot1"-->
-                <!--android:layout_width="8dp"-->
-                <!--android:layout_height="8dp"-->
-                <!--android:background="@mipmap/btn_check_normal" />-->
-
-            <!--<View-->
-                <!--android:id="@+id/v_dot2"-->
-                <!--android:layout_width="8dp"-->
-                <!--android:layout_height="8dp"-->
-                <!--android:layout_marginLeft="5dp"-->
-                <!--android:background="@mipmap/btn_check_normal_nightmode" />-->
-        <!--</LinearLayout>-->
-    <!--</RelativeLayout>-->
+    <!--RecyclerView里包括轮播图头布局和列表-->
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/omnibus_fragment_gallery_rv"
+        android:id="@+id/omnibus_fragment_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
-
-
-    </android.support.v7.widget.RecyclerView>
-
-
-
+        />
 </LinearLayout>
