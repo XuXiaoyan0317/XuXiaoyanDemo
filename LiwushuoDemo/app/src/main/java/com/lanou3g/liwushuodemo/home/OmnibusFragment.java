@@ -1,5 +1,6 @@
 package com.lanou3g.liwushuodemo.home;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
@@ -11,15 +12,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
-import com.lanou3g.liwushuodemo.Base.BannerBean;
+import com.lanou3g.liwushuodemo.Bean.BannerBean;
 import com.lanou3g.liwushuodemo.Base.BaseFragment;
 import com.lanou3g.liwushuodemo.Bean.CellBean;
 import com.lanou3g.liwushuodemo.Bean.PlayerBean;
+import com.lanou3g.liwushuodemo.Bean.SelectBean;
 import com.lanou3g.liwushuodemo.R;
+import com.lanou3g.liwushuodemo.clickinterface.OnItemClickListener;
+import com.lanou3g.liwushuodemo.select.SelectDetilActivity;
 import com.lanou3g.liwushuodemo.volley.VolleySingle;
 
 import java.util.ArrayList;
@@ -30,11 +32,13 @@ import java.util.concurrent.TimeUnit;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.app.ActionBar.LayoutParams;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * 精选页
  * Created by dllo on 16/5/11.
  */
-public class OmnibusFragment extends BaseFragment {
+public class OmnibusFragment extends BaseFragment implements OnItemClickListener {
     //可横向滑动的组件的创建
     private RecyclerView headerRecyclerView;
     private HeaderAdapter headerAdapter;
@@ -98,6 +102,7 @@ public class OmnibusFragment extends BaseFragment {
         headerRecyclerView.setLayoutManager(manager);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
+
         //绑定适配器
         //最大的适配器
         omnibusAdapter = new OmnibusAdapter(context);
@@ -110,7 +115,16 @@ public class OmnibusFragment extends BaseFragment {
         //小圆点的线性布局初始化
         dotLayout = (LinearLayout) playFlater.findViewById(R.id.dotLayout);
         dotLayout.removeAllViews();
+
+        headerAdapter.setItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                Intent intent = new Intent(context, HeaderDetilActivity.class);
+                startActivity(intent);
+            }
+        });
         initDot();
+        omnibusAdapter.setItemClickListener(this);
 
 
     }
@@ -129,6 +143,7 @@ public class OmnibusFragment extends BaseFragment {
             @Override
             public void onResponse(PlayerBean response) {
                 imageBean = response.getData().getBanners();
+
                 initPlayer();
             }
         },"playerData");
@@ -163,6 +178,7 @@ public class OmnibusFragment extends BaseFragment {
                 omnibusAdapter.setHeaderView(headerFlater);
             }
         },"cellData");
+
 
     }
 
@@ -231,6 +247,21 @@ public class OmnibusFragment extends BaseFragment {
 
         scheduledExecutorService.scheduleAtFixedRate(new SlideShowTask(), 1, imageBean.size(), TimeUnit.SECONDS);
     }
+
+
+    //点击事件
+    @Override
+    public void onClick(int position) {
+        Intent intent= new Intent(context,ListDetilActivity.class);
+//        int target = imageBean.get(position).getTarget_id();
+//        Log.d("画画画",target +"");
+//        intent.putExtra("target",target);
+
+        startActivity(intent);
+    }
+
+
+
 
     /**
      * 执行轮播图切换任务

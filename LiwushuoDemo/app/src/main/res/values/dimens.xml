@@ -5,4 +5,6 @@
 
     <dimen name="menu_name">10dp</dimen>
     <dimen name="title_content">20dp</dimen>
+    <dimen name="profile_cart">12dp</dimen>
+    <dimen name="select_product_count">10dp</dimen>
 </resources>

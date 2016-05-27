@@ -1,12 +1,18 @@
 package com.lanou3g.liwushuodemo.select;
 
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Toast;
+
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.lanou3g.liwushuodemo.Base.BaseFragment;
+import com.lanou3g.liwushuodemo.Base.MyApplication;
 import com.lanou3g.liwushuodemo.Bean.SelectBean;
 import com.lanou3g.liwushuodemo.R;
+import com.lanou3g.liwushuodemo.clickinterface.OnItemClickListener;
 import com.lanou3g.liwushuodemo.volley.VolleySingle;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +20,7 @@ import java.util.List;
 /**
  * Created by dllo on 16/5/9.
  */
-public class SelectFragment extends BaseFragment {
+public class SelectFragment extends BaseFragment implements OnItemClickListener{
     private RecyclerView recyclerView;
     private SelectAdaper recycleAdaper;
     private List<SelectBean.DataBean.ItemsBean> itemsBeens;
@@ -30,6 +36,7 @@ public class SelectFragment extends BaseFragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
         recycleAdaper = new SelectAdaper(getContext());
         recyclerView.setAdapter(recycleAdaper);
+        recycleAdaper.setItemClickListener(this);
 
     }
 
@@ -59,4 +66,14 @@ public class SelectFragment extends BaseFragment {
         VolleySingle.getInstance().removeRequest("selectData");
         super.onDestroy();
     }
+
+    @Override
+    public void onClick(int position) {
+        Intent intent = new Intent(context,SelectDetilActivity.class);
+        context.startActivity(intent);
+
+    }
+
+
+
 }

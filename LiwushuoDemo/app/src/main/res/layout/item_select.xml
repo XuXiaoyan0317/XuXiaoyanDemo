@@ -29,34 +29,43 @@
             android:layout_margin="10dp"
             android:textColor="@color/select_product_name" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:orientation="horizontal">
+            android:layout_marginRight="10dp">
 
             <TextView
                 android:id="@+id/select_fragment_product_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="15312"
-                android:textColor="@color/menu_name" />
+                android:textColor="@color/title" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/baichuan_btn_favorites" />
+
 
             <TextView
                 android:id="@+id/select_fragment_product_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="26345" />
-        </LinearLayout>
+                android:text="26345"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:textSize="@dimen/select_product_count"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_small_heart_normal"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/select_fragment_product_size"
+                android:paddingRight="10dp"
+                />
+
+        </RelativeLayout>
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

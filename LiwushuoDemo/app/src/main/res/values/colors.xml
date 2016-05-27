@@ -4,9 +4,11 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="title">#f3fc2767</color>
-    <color name="menu_name">#f3fc2767</color>
+    <color name="title">#fefa343b</color>
+    <color name="menu_name_selected">#fefa343b</color>
+    <color name="menu_name_normal">#6da9a6a6</color>
     <color name="title_content">#ffffff</color>
     <color name="select_background">#6dd7d3d3</color>
     <color name="select_product_name">#000000</color>
+
 </resources>

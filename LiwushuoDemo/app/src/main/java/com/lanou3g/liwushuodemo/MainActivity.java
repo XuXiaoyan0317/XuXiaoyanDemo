@@ -1,5 +1,6 @@
 package com.lanou3g.liwushuodemo;
 
+import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -56,15 +57,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.main_aty_home_btn:
                 trans.replace(R.id.main_aty_replace, new HomeFragment());
+
                 break;
             case R.id.main_aty_select_btn:
                 trans.replace(R.id.main_aty_replace, new SelectFragment());
+
                 break;
             case R.id.main_aty_category_btn:
                 trans.replace(R.id.main_aty_replace, new CategoryFragment());
+
                 break;
             case R.id.main_aty_profile_btn:
                 trans.replace(R.id.main_aty_replace, new ProfileFragment());
+
                 break;
             default:
                 break;

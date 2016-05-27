@@ -26,7 +26,7 @@
             android:button="@null"
             android:drawableTop="@drawable/selector_home"
             android:text="@string/home_name"
-            android:textColor="@color/menu_name"
+            android:textColor="@color/menu_name_selected"
             android:textSize="@dimen/menu_name"
             />
 
@@ -39,7 +39,7 @@
             android:button="@null"
             android:drawableTop="@drawable/selector_select"
             android:text="@string/select_name"
-            android:textColor="@color/menu_name"
+            android:textColor="@color/menu_name_selected"
             android:textSize="@dimen/menu_name"
             />
 
@@ -52,7 +52,7 @@
             android:button="@null"
             android:drawableTop="@drawable/selector_category"
             android:text="@string/category_name"
-            android:textColor="@color/menu_name"
+            android:textColor="@color/menu_name_selected"
             android:textSize="@dimen/menu_name"
             />
         <RadioButton
@@ -64,7 +64,7 @@
             android:button="@null"
             android:drawableTop="@drawable/selector_profile"
             android:text="@string/profile_name"
-            android:textColor="@color/menu_name"
+            android:textColor="@color/menu_name_selected"
             android:textSize="@dimen/menu_name"/>
 
     </RadioGroup>

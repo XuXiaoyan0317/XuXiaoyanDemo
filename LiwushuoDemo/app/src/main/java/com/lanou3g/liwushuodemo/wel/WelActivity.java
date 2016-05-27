@@ -30,6 +30,7 @@ public class WelActivity extends BaseActivity {
                     Thread.sleep(5000);
                     Intent intent = new Intent(WelActivity.this, MainActivity.class);
                     startActivity(intent);
+                    finish();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

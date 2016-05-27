@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
+    <RelativeLayout
+        android:id="@+id/category_fragment_strategy_header_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+    <!--这是头布局的-->
+    <TextView
+        android:id="@+id/category_fragment_strategy_header_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="专题"/>
+    <TextView
+    android:id="@+id/category_fragment_strategy_header_tv"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+        android:text="查看全部"
+        android:layout_alignParentRight="true"/>
+
+    <android.support.v7.widget.RecyclerView
+      android:id="@+id/category_fragment_strategy_header_rv"
+      android:layout_width="match_parent"
+      android:layout_height="70dp"
+        android:layout_below="@id/category_fragment_strategy_header_title"/>
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:background="@color/select_background"
+        android:layout_below="@id/category_fragment_strategy_header_rl"/>
+
+</RelativeLayout>

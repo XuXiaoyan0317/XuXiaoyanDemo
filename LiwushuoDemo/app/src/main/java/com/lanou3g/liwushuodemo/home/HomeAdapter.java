@@ -28,9 +28,11 @@ public class HomeAdapter extends FragmentStatePagerAdapter {
         return mFragments.get(position);
     }
 
+
+
     @Override
     public int getCount() {
-        return mFragments==null?0:mFragments.size();
+        return mTitles == null? 0 :mTitles.size();
     }
 
     @Override

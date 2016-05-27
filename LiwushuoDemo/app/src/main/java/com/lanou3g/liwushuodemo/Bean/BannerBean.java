@@ -1,4 +1,4 @@
-package com.lanou3g.liwushuodemo.Base;
+package com.lanou3g.liwushuodemo.Bean;
 
 import java.util.List;
 

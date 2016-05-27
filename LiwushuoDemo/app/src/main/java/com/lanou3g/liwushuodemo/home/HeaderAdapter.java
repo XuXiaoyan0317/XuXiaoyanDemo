@@ -2,16 +2,15 @@ package com.lanou3g.liwushuodemo.home;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.lanou3g.liwushuodemo.Base.BannerBean;
+import com.lanou3g.liwushuodemo.Bean.BannerBean;
 import com.lanou3g.liwushuodemo.R;
+import com.lanou3g.liwushuodemo.clickinterface.OnItemClickListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import it.sephiroth.android.library.picasso.Picasso;
@@ -23,6 +22,11 @@ import it.sephiroth.android.library.picasso.Picasso;
 public class HeaderAdapter extends RecyclerView.Adapter<HeaderAdapter.HeaderViewHolder> {
     private List<BannerBean.DataBean.SecondaryBannersBean> bannersBeens;
     private Context context;
+    private OnItemClickListener itemClickListener;
+
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
 
     public void setBannersBeens(List<BannerBean.DataBean.SecondaryBannersBean> bannersBeens) {
         this.bannersBeens = bannersBeens;
@@ -41,8 +45,16 @@ public class HeaderAdapter extends RecyclerView.Adapter<HeaderAdapter.HeaderView
     }
 
     @Override
-    public void onBindViewHolder(HeaderViewHolder holder, int position) {
+    public void onBindViewHolder(HeaderViewHolder holder, final int position) {
         Picasso.with(context).load(bannersBeens.get(position).getImage_url()).into(holder.imageView);
+        if(itemClickListener!=null){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onClick(position);
+                }
+            });
+        }
     }
 
     @Override

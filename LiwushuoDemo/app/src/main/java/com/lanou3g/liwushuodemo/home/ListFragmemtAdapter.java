@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.lanou3g.liwushuodemo.Bean.list.WearBean;
+import com.lanou3g.liwushuodemo.Bean.ImagDetilBean;
+import com.lanou3g.liwushuodemo.Bean.ListBean;
 import com.lanou3g.liwushuodemo.R;
+import com.lanou3g.liwushuodemo.clickinterface.OnItemClickListener;
 
 import java.util.List;
 
@@ -19,10 +21,28 @@ import it.sephiroth.android.library.picasso.Picasso;
  * Created by dllo on 16/5/18.
  */
 public class ListFragmemtAdapter extends RecyclerView.Adapter<ListFragmemtAdapter.ListViewHolder> {
-    private List<WearBean.DataBean.ItemsBean> itemsBeanList;
+    private List<ListBean.DataBean.ItemsBean> itemsBeanList;
     private Context context;
+    private OnItemClickListener itemClickListener;
+    private List<ImagDetilBean.DataBean.PostsBean> detilBean;
+    int flag= 0;
 
-    public void setItemsBeanList(List<WearBean.DataBean.ItemsBean> itemsBeanList) {
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+        notifyDataSetChanged();
+    }
+
+    public void setDetilBean(List<ImagDetilBean.DataBean.PostsBean> detilBean) {
+        this.detilBean = detilBean;
+        notifyDataSetChanged();
+        Log.d("哈哈哈",detilBean+"");
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
+
+    public void setItemsBeanList(List<ListBean.DataBean.ItemsBean> itemsBeanList) {
         this.itemsBeanList = itemsBeanList;
         Log.d("穿搭",itemsBeanList+"");
         notifyDataSetChanged();
@@ -40,13 +60,32 @@ public class ListFragmemtAdapter extends RecyclerView.Adapter<ListFragmemtAdapte
     }
 
     @Override
-    public void onBindViewHolder(ListViewHolder holder, int position) {
-        Picasso.with(context).load(itemsBeanList.get(position).getCover_image_url()).into(holder.imageView);
+    public void onBindViewHolder(ListViewHolder holder, final int position) {
+        if (flag==0) {
+            Picasso.with(context).load(itemsBeanList.get(position).getCover_image_url()).into(holder.imageView);
+        }else {
+            Log.d("测试222","");
+            Picasso.with(context).load(detilBean.get(position).getCover_image_url()).into(holder.imageView);
+            flag=0;
+        }
+        if (itemClickListener!=null){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onClick(position);
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
+        if (flag==0){
         return itemsBeanList==null?0:itemsBeanList.size();
+        }else {
+            return detilBean==null?0:detilBean.size();
+        }
+
     }
 
     class ListViewHolder extends RecyclerView.ViewHolder{

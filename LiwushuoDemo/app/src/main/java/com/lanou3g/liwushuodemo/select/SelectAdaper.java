@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.lanou3g.liwushuodemo.Bean.SelectBean;
 import com.lanou3g.liwushuodemo.R;
+import com.lanou3g.liwushuodemo.clickinterface.OnItemClickListener;
 
 import java.util.List;
 
@@ -21,7 +22,12 @@ import it.sephiroth.android.library.picasso.Picasso;
  */
 public class SelectAdaper extends RecyclerView.Adapter<SelectAdaper.SelectViewHodler> {
     private Context context;
-    List<SelectBean.DataBean.ItemsBean> itemsBeens;
+    private List<SelectBean.DataBean.ItemsBean> itemsBeens;
+    private OnItemClickListener itemClickListener;
+
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
 
     public SelectAdaper(Context context) {
         this.context = context;
@@ -37,15 +43,26 @@ public class SelectAdaper extends RecyclerView.Adapter<SelectAdaper.SelectViewHo
     public SelectViewHodler onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_select, parent, false);
         SelectViewHodler hodler = new SelectViewHodler(view);
+
+
         return hodler;
     }
 
     @Override
-    public void onBindViewHolder(final SelectViewHodler holder, int position) {
+    public void onBindViewHolder(final SelectViewHodler holder, final int position) {
         Picasso.with(context).load(itemsBeens.get(position).getData().getCover_image_url()).into(holder.productImg);
         holder.productName.setText(itemsBeens.get(position).getData().getName());
         holder.productPrice.setText(itemsBeens.get(position).getData().getPrice());
+
         //holder.messageSize.setText(itemsBeens.get(position).getData().getFavorites_count());
+        if (itemClickListener!=null){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onClick(position);
+                }
+            });
+        }
 
     }
 
@@ -53,6 +70,8 @@ public class SelectAdaper extends RecyclerView.Adapter<SelectAdaper.SelectViewHo
     public int getItemCount() {
         return itemsBeens == null ? 0 : itemsBeens.size();
     }
+
+
 
     class SelectViewHodler extends RecyclerView.ViewHolder {
         private ImageView productImg;

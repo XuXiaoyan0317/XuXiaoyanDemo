@@ -6,6 +6,7 @@
     <ImageView
         android:id="@+id/list_fragment_content_iv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:src="@mipmap/xxy11"/>
 
 </LinearLayout>

@@ -39,8 +39,8 @@ public class CategoryFragment extends BaseFragment {
     @Override
     protected void initData() {
         fragments = new ArrayList<>();
-        fragments.add(new GiftFragment());
         fragments.add(new StrategyFragment());
+        fragments.add(new GiftFragment());
         adapter.setFragments(fragments);
 
     }

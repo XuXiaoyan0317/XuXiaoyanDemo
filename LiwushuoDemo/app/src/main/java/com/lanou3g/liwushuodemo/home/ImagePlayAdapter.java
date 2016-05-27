@@ -1,6 +1,7 @@
 package com.lanou3g.liwushuodemo.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 
 import com.lanou3g.liwushuodemo.Bean.PlayerBean;
 import com.lanou3g.liwushuodemo.R;
+import com.lanou3g.liwushuodemo.select.SelectDetilActivity;
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ import it.sephiroth.android.library.picasso.Picasso;
 public class ImagePlayAdapter extends PagerAdapter {
     private Context context;
     private List<PlayerBean.DataBean.BannersBean> imageBean;
+    public int target;
 
 
     public void setImageBean(List<PlayerBean.DataBean.BannersBean> imageBean) {
@@ -52,12 +55,22 @@ public class ImagePlayAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_ommibus_player_img, null);
-        ImageView iv = (ImageView) v.findViewById(R.id.item_omnibus_fragment_player_iv);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_ommibus_player_img, null);
+        target = imageBean.get(position).getTarget_id();
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ImageDetilActivity.class);
+                Log.d("画画画", target + "");
+                intent.putExtra("target", target);
+                context.startActivity(intent);
+            }
+        });
+        ImageView iv = (ImageView) view.findViewById(R.id.item_omnibus_fragment_player_iv);
         Picasso.with(context).load(imageBean.get(position).getImage_url()).into(iv);
         System.out.println("------------");
-        container.addView(v);
-        return v;
+        container.addView(view);
+        return view;
 
 
 //        ImageView view = imageBean.get(position).getImage_url();

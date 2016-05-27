@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.lanou3g.liwushuodemo.Bean.CellBean;
 import com.lanou3g.liwushuodemo.R;
+import com.lanou3g.liwushuodemo.clickinterface.OnItemClickListener;
 
 import java.util.List;
 
@@ -28,6 +29,11 @@ public class OmnibusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public View playerView;
     public View headerView;
     private List<CellBean.DataBean.ItemsBean> cellBeans;
+    private OnItemClickListener itemClickListener;
+
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
 
     public void setCellBeans(List<CellBean.DataBean.ItemsBean> cellBeans) {
         this.cellBeans = cellBeans;
@@ -83,7 +89,7 @@ public class OmnibusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof PlayerViewHolder) {
 
         } else if (holder instanceof HeaderViewHolder) {
@@ -92,11 +98,17 @@ public class OmnibusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Log.d("测试2", "-----" );
             Picasso.with(context).load(cellBeans.get(position-2).getCover_image_url()).into(((ContentViewHolder) holder).iv);
             ((ContentViewHolder) holder).tv.setText(cellBeans.get(position-2).getTitle());
+
             Log.d("测试3", "-----" );
-
-
         }
-
+        if (itemClickListener!=null){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onClick(position);
+                }
+            });
+        }
 
     }
 

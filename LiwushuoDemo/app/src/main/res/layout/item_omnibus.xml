@@ -10,8 +10,8 @@
         android:id="@+id/omnibus_fragment_content_iv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/omnibus_content_shape"
         android:scaleType="fitCenter" />
+
     <!--点赞的图标-->
     <!--<ImageView-->
         <!--android:layout_width="wrap_content"-->
