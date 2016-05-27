@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.lanou3g.liwushuodemo.Bean.ImagDetilBean;
 import com.lanou3g.liwushuodemo.Bean.ListBean;
+import com.lanou3g.liwushuodemo.Bean.SelectContentBean;
 import com.lanou3g.liwushuodemo.R;
 import com.lanou3g.liwushuodemo.clickinterface.OnItemClickListener;
 
@@ -26,6 +27,7 @@ public class ListFragmemtAdapter extends RecyclerView.Adapter<ListFragmemtAdapte
     private OnItemClickListener itemClickListener;
     private List<ImagDetilBean.DataBean.PostsBean> detilBean;
     int flag= 0;
+    private List<SelectContentBean.DataBean.ItemsBean> strategyBean;
 
     public void setItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
@@ -48,6 +50,11 @@ public class ListFragmemtAdapter extends RecyclerView.Adapter<ListFragmemtAdapte
         notifyDataSetChanged();
     }
 
+    public void setStrategyBean(List<SelectContentBean.DataBean.ItemsBean> strategyBean) {
+        this.strategyBean = strategyBean;
+        notifyDataSetChanged();
+    }
+
     public ListFragmemtAdapter(Context context) {
         this.context = context;
     }
@@ -63,10 +70,11 @@ public class ListFragmemtAdapter extends RecyclerView.Adapter<ListFragmemtAdapte
     public void onBindViewHolder(ListViewHolder holder, final int position) {
         if (flag==0) {
             Picasso.with(context).load(itemsBeanList.get(position).getCover_image_url()).into(holder.imageView);
-        }else {
+        }else if (flag==1){
             Log.d("测试222","");
             Picasso.with(context).load(detilBean.get(position).getCover_image_url()).into(holder.imageView);
-            flag=0;
+        }else {
+            Picasso.with(context).load(strategyBean.get(position).getCover_image_url()).into(holder.imageView);
         }
         if (itemClickListener!=null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -82,10 +90,11 @@ public class ListFragmemtAdapter extends RecyclerView.Adapter<ListFragmemtAdapte
     public int getItemCount() {
         if (flag==0){
         return itemsBeanList==null?0:itemsBeanList.size();
-        }else {
+        }else if (flag==1){
             return detilBean==null?0:detilBean.size();
+        }else {
+            return strategyBean==null?0:strategyBean.size();
         }
-
     }
 
     class ListViewHolder extends RecyclerView.ViewHolder{

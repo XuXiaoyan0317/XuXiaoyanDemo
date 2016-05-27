@@ -1,4 +1,4 @@
-package com.lanou3g.liwushuodemo.category;
+package com.lanou3g.liwushuodemo.category.gift;
 
 import android.util.Log;
 import android.view.View;

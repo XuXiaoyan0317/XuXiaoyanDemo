@@ -1,6 +1,7 @@
-package com.lanou3g.liwushuodemo.category;
+package com.lanou3g.liwushuodemo.category.strategy;
 
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +13,8 @@ import com.lanou3g.liwushuodemo.Base.BaseFragment;
 import com.lanou3g.liwushuodemo.Bean.StrategyBean;
 import com.lanou3g.liwushuodemo.Bean.StrategyHeaderBean;
 import com.lanou3g.liwushuodemo.R;
+import com.lanou3g.liwushuodemo.clickinterface.OnItemClickListener;
+import com.lanou3g.liwushuodemo.home.ImageDetilActivity;
 import com.lanou3g.liwushuodemo.volley.VolleySingle;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +23,14 @@ import java.util.List;
  * 攻略界面
  * Created by dllo on 16/5/12.
  */
-public class StrategyFragment extends BaseFragment {
+public class StrategyFragment extends BaseFragment implements OnItemClickListener{
     private RecyclerView recyclerView;
     private StrategyAdapter strategyAdapter;
     //这是头布局的
     private RecyclerView headerRecyclerView;
     private StrategyHeaderAdapter headerAdapter;
+
+
     //这是带圆圈的的数据
     private List<StrategyBean.DataBean.ChannelGroupsBean> groupsBeen;
     //这是头布局
@@ -52,6 +57,7 @@ public class StrategyFragment extends BaseFragment {
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         headerRecyclerView.setLayoutManager(manager);
         headerRecyclerView.setAdapter(headerAdapter);
+        headerAdapter.setItemClickListener(this);
 
 
     }
@@ -85,10 +91,19 @@ public class StrategyFragment extends BaseFragment {
                 headerBean=response.getData().getCollections();
                 headerAdapter.setHeaderBeans(headerBean);
                 Log.d("我的数据",""+headerBean);
+
             }
         });
-
     }
 
+
+    @Override
+    public void onClick(int position) {
+        Intent intent = new Intent(context, ImageDetilActivity.class);
+       int strategyId =  headerBean.get(position).getId();
+        intent.putExtra("strategyId",strategyId);
+        startActivity(intent);
+
+    }
 
 }

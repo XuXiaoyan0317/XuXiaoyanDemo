@@ -37,11 +37,20 @@
             android:background="#000000" />
 
     </RelativeLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/category_fragment_gift_content_select_rv"
-        android:layout_width="match_parent"
+    <GridView
+        android:id="@+id/category_fragment_gift_content_gridview"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/rv" />
+        android:numColumns="3"
+        android:horizontalSpacing="15dp"
+        android:layout_below="@id/rv"
+        android:verticalSpacing="10dp"
+        android:background="#000000"/>
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/category_fragment_gift_content_select_rv"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/rv" />-->
 
 </RelativeLayout>

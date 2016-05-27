@@ -21,6 +21,7 @@
         <activity android:name=".home.HeaderDetilActivity"/>
         <activity android:name=".home.ImageDetilActivity"/>
         <activity android:name=".home.ListDetilActivity"/>
+        <activity android:name=".home.ImageWebActivity"/>
 
     </application>
 

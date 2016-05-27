@@ -30,8 +30,6 @@ import de.greenrobot.event.ThreadMode;
 public class  ListFragment extends BaseFragment implements OnItemClickListener {
     private RecyclerView recyclerView;
     private ListFragmemtAdapter adapter;
-    //private ListBroadcast listBroadcast;
-//    private ListBean listBean;
     private List<ListBean.DataBean.ItemsBean> itemBeans;
 
     @Override
@@ -55,14 +53,7 @@ public class  ListFragment extends BaseFragment implements OnItemClickListener {
 
     @Override
     protected void initData() {
-        //动态注册广播
-//        listBroadcast = new ListBroadcast();
-//        IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction("com.lanou3g.liwushuodemo.homecom.LISTFRAGMENT");
-//        context.registerReceiver(listBroadcast,intentFilter);
-
         adapter.setItemsBeanList(itemBeans);
-        Log.d("广播数据",""+itemBeans);
 
     }
 
@@ -78,6 +69,8 @@ public class  ListFragment extends BaseFragment implements OnItemClickListener {
     @Override
     public void onClick(int position) {
         Intent intent = new Intent(context,ListDetilActivity.class);
+        String listPath =itemBeans.get(position).getUrl();
+        intent.putExtra("listPath",listPath);
         startActivity(intent);
     }
 

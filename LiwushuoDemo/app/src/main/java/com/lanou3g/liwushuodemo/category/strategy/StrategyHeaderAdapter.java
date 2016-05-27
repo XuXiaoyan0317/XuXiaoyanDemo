@@ -1,4 +1,4 @@
-package com.lanou3g.liwushuodemo.category;
+package com.lanou3g.liwushuodemo.category.strategy;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.lanou3g.liwushuodemo.Bean.StrategyHeaderBean;
 import com.lanou3g.liwushuodemo.R;
+import com.lanou3g.liwushuodemo.clickinterface.OnItemClickListener;
 
 import java.util.List;
 
@@ -20,7 +21,11 @@ import it.sephiroth.android.library.picasso.Picasso;
 public class StrategyHeaderAdapter extends RecyclerView.Adapter<StrategyHeaderAdapter.HeaderViewHodler> {
     private Context context;
     private List<StrategyHeaderBean.DataBean.CollectionsBean> headerBeans;
+    private OnItemClickListener itemClickListener;
 
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
 
     public void setHeaderBeans(List<StrategyHeaderBean.DataBean.CollectionsBean> headerBeans) {
         this.headerBeans = headerBeans;
@@ -39,9 +44,16 @@ public class StrategyHeaderAdapter extends RecyclerView.Adapter<StrategyHeaderAd
     }
 
     @Override
-    public void onBindViewHolder(HeaderViewHodler holder, int position) {
+    public void onBindViewHolder(HeaderViewHodler holder, final int position) {
         Picasso.with(context).load(headerBeans.get(position).getBanner_image_url()).into(holder.imageView);
-
+        if (itemClickListener!=null){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    itemClickListener.onClick(position);
+                }
+            });
+        }
 
     }
 

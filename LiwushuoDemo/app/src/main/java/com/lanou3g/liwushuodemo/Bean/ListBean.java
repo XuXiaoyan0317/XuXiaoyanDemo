@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by dllo on 16/5/18.
  */
-public class ListBean implements Parcelable {
+public class ListBean  {
 
 
     private int code;
@@ -20,17 +20,6 @@ public class ListBean implements Parcelable {
         message = in.readString();
     }
 
-    public static final Creator<ListBean> CREATOR = new Creator<ListBean>() {
-        @Override
-        public ListBean createFromParcel(Parcel in) {
-            return new ListBean(in);
-        }
-
-        @Override
-        public ListBean[] newArray(int size) {
-            return new ListBean[size];
-        }
-    };
 
     public int getCode() {
         return code;
@@ -56,16 +45,7 @@ public class ListBean implements Parcelable {
         this.message = message;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(code);
-        dest.writeString(message);
-    }
 
     public static class DataBean {
         private PagingBean paging;

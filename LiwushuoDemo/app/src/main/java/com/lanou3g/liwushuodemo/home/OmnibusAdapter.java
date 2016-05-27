@@ -26,8 +26,8 @@ public class OmnibusAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public static final int PLAYER_TYPE = 0;
     public static final int HEADER_TYPE = 1;
     public static final int CONTENT_TYPE = 2;
-    public View playerView;
-    public View headerView;
+    public View playerView;//轮播图的布局
+    public View headerView;//横向滑动的布局
     private List<CellBean.DataBean.ItemsBean> cellBeans;
     private OnItemClickListener itemClickListener;
 

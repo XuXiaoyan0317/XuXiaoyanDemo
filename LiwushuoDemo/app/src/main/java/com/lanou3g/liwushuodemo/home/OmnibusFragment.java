@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.app.ActionBar.LayoutParams;
 
@@ -70,6 +71,7 @@ public class OmnibusFragment extends BaseFragment implements OnItemClickListener
             super.handleMessage(msg);
             if (msg.what == 100) {
                 viewPager.setCurrentItem(currentItem);
+
             }
         }
 
@@ -110,7 +112,6 @@ public class OmnibusFragment extends BaseFragment implements OnItemClickListener
         recyclerView.setLayoutManager(linearLayoutManager);
 
 
-
         viewPager = (ViewPager) playFlater.findViewById(R.id.omnibus_fragment_player_vp);
         //小圆点的线性布局初始化
         dotLayout = (LinearLayout) playFlater.findViewById(R.id.dotLayout);
@@ -124,7 +125,7 @@ public class OmnibusFragment extends BaseFragment implements OnItemClickListener
             }
         });
         initDot();
-        omnibusAdapter.setItemClickListener(this);
+
 
 
     }
@@ -146,7 +147,7 @@ public class OmnibusFragment extends BaseFragment implements OnItemClickListener
 
                 initPlayer();
             }
-        },"playerData");
+        }, "playerData");
 
         VolleySingle.getInstance()._addRequest("http://api.liwushuo.com/v2/secondary_banners?gender=2&generation=1", new Response.ErrorListener() {
             @Override
@@ -156,7 +157,7 @@ public class OmnibusFragment extends BaseFragment implements OnItemClickListener
         }, BannerBean.class, new Response.Listener<BannerBean>() {
             @Override
             public void onResponse(BannerBean response) {
-                bannersBeen= response.getData().getSecondary_banners();
+                bannersBeen = response.getData().getSecondary_banners();
                 headerRecyclerView.setAdapter(headerAdapter);
                 headerAdapter.setBannersBeens(bannersBeen);
 
@@ -171,23 +172,20 @@ public class OmnibusFragment extends BaseFragment implements OnItemClickListener
         }, CellBean.class, new Response.Listener<CellBean>() {
             @Override
             public void onResponse(CellBean response) {
-               cellBean =  response.getData().getItems();
+                cellBean = response.getData().getItems();
                 omnibusAdapter.setCellBeans(cellBean);
                 recyclerView.setAdapter(omnibusAdapter);
                 omnibusAdapter.setPlayerView(playFlater);
                 omnibusAdapter.setHeaderView(headerFlater);
+                omnibusAdapter.setItemClickListener(OmnibusFragment.this);
             }
-        },"cellData");
+        }, "cellData");
 
 
     }
 
 
-
-
-
-
-    public void initPlayer(){
+    public void initPlayer() {
 
         //初始化适配器
         playAdapter = new ImagePlayAdapter(context);
@@ -202,6 +200,7 @@ public class OmnibusFragment extends BaseFragment implements OnItemClickListener
         viewPager.addOnPageChangeListener(new MyPageChangeListener());
         if (isAutoPlay) {
             startPlay();
+
         }
         Log.d("快出来2", "%%%%%%%%");
         dotViewList = new ArrayList<>();
@@ -252,15 +251,11 @@ public class OmnibusFragment extends BaseFragment implements OnItemClickListener
     //点击事件
     @Override
     public void onClick(int position) {
-        Intent intent= new Intent(context,ListDetilActivity.class);
-//        int target = imageBean.get(position).getTarget_id();
-//        Log.d("画画画",target +"");
-//        intent.putExtra("target",target);
-
+        Intent intent = new Intent(context, ListDetilActivity.class);
+        intent.putExtra("url",cellBean.get(position-2).getUrl());
         startActivity(intent);
+
     }
-
-
 
 
     /**
@@ -296,10 +291,12 @@ public class OmnibusFragment extends BaseFragment implements OnItemClickListener
             switch (arg0) {
                 case 1:// 手势滑动，空闲中
                     isAutoPlay = false;
+                    playAdapter.setCurrentItem(viewPager.getCurrentItem());
                     System.out.println(" 手势滑动，空闲中");
                     break;
                 case 2:// 界面切换中
                     isAutoPlay = true;
+                    playAdapter.setCurrentItem(viewPager.getCurrentItem());
                     System.out.println(" 界面切换中");
                     break;
                 case 0:// 滑动结束，即切换完毕或者加载完毕
@@ -345,7 +342,6 @@ public class OmnibusFragment extends BaseFragment implements OnItemClickListener
         VolleySingle.getInstance().removeRequest("playerData");
         VolleySingle.getInstance().removeRequest("bannerData");
         VolleySingle.getInstance().removeRequest("cellData");
-
         super.onDestroy();
     }
 }

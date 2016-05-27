@@ -1,4 +1,4 @@
-package com.lanou3g.liwushuodemo.category;
+package com.lanou3g.liwushuodemo.category.gift;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

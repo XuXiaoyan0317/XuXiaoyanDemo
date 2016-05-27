@@ -61,17 +61,20 @@ public class SelectFragment extends BaseFragment implements OnItemClickListener{
 
     }
 
-    @Override
-    public void onDestroy() {
-        VolleySingle.getInstance().removeRequest("selectData");
-        super.onDestroy();
-    }
+
 
     @Override
     public void onClick(int position) {
         Intent intent = new Intent(context,SelectDetilActivity.class);
+       String selectPath =  itemsBeens.get(position).getData().getPurchase_url();
+        intent.putExtra("selectPath",selectPath);
         context.startActivity(intent);
 
+    }
+    @Override
+    public void onDestroy() {
+        VolleySingle.getInstance().removeRequest("selectData");
+        super.onDestroy();
     }
 
 

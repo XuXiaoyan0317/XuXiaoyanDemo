@@ -1,4 +1,4 @@
-package com.lanou3g.liwushuodemo.category;
+package com.lanou3g.liwushuodemo.category.gift;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -50,7 +50,7 @@ public class TitleAdapter extends BaseAdapter {
         ViewHolder holder = null;//定义一个viewholder
         if (convertView==null){
             convertView = LayoutInflater.from(context).inflate(R.layout.item_category_gift_title,parent,false);
-            //进行findviewbyid操作 并把操作玩的组件保存起来
+            //进行findviewbyid操作并把操作玩的组件保存起来
             //初始化hodler,将holder内部的组件都完成findviewbyid操作
             holder = new ViewHolder(convertView);
             //把初始化好的ViewHolder放到converView里

@@ -7,6 +7,8 @@ import android.support.v4.view.ViewPager;
 
 import com.lanou3g.liwushuodemo.Base.BaseFragment;
 import com.lanou3g.liwushuodemo.R;
+import com.lanou3g.liwushuodemo.category.gift.GiftFragment;
+import com.lanou3g.liwushuodemo.category.strategy.StrategyFragment;
 
 import java.util.ArrayList;
 import java.util.List;

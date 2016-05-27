@@ -25,7 +25,12 @@ public class ImagePlayAdapter extends PagerAdapter {
     private Context context;
     private List<PlayerBean.DataBean.BannersBean> imageBean;
     public int target;
+    private int currentItem;
 
+    public void setCurrentItem(int currentItem) {
+        this.currentItem = currentItem;
+        notifyDataSetChanged();
+    }
 
     public void setImageBean(List<PlayerBean.DataBean.BannersBean> imageBean) {
         this.imageBean = imageBean;
@@ -48,22 +53,28 @@ public class ImagePlayAdapter extends PagerAdapter {
         return arg0 == arg1;
     }
 
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-
-    }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(final ViewGroup container, int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_ommibus_player_img, null);
-        target = imageBean.get(position).getTarget_id();
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //如果target=0就跳转到webview页
+                //不是0就跳转到ImageDetilActivity
+                target = imageBean.get(currentItem).getTarget_id();
+                String  webPath=  imageBean.get(currentItem).getTarget_url();
+                if (target==0){
+                    Intent intent = new Intent(context, ImageWebActivity.class);
+                    intent.putExtra("webPath",webPath);
+                    context.startActivity(intent);
+                }else {
                 Intent intent = new Intent(context, ImageDetilActivity.class);
+
                 Log.d("画画画", target + "");
                 intent.putExtra("target", target);
-                context.startActivity(intent);
+                context.startActivity(intent);}
             }
         });
         ImageView iv = (ImageView) view.findViewById(R.id.item_omnibus_fragment_player_iv);
@@ -85,4 +96,12 @@ public class ImagePlayAdapter extends PagerAdapter {
 
 
     }
+
+
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+
+    }
+
 }

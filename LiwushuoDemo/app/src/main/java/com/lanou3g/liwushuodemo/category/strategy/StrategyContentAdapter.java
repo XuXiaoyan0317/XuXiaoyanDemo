@@ -1,4 +1,4 @@
-package com.lanou3g.liwushuodemo.category;
+package com.lanou3g.liwushuodemo.category.strategy;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.lanou3g.liwushuodemo.Bean.StrategyBean;
 import com.lanou3g.liwushuodemo.R;
+import com.lanou3g.liwushuodemo.clickinterface.OnItemClickListener;
 
 import java.util.List;
 
@@ -21,6 +22,12 @@ import it.sephiroth.android.library.picasso.Picasso;
 public class StrategyContentAdapter extends RecyclerView.Adapter<StrategyContentAdapter.ImageViewHodler> {
     private Context context;
     private List<StrategyBean.DataBean.ChannelGroupsBean.ChannelsBean> imgBeans;
+    private OnItemClickListener itemClickListener;
+    public static  int id;
+
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
 
     public void setImgBeans(List<StrategyBean.DataBean.ChannelGroupsBean.ChannelsBean> imgBeans) {
         this.imgBeans = imgBeans;
@@ -39,11 +46,29 @@ public class StrategyContentAdapter extends RecyclerView.Adapter<StrategyContent
     }
 
     @Override
-    public void onBindViewHolder(ImageViewHodler holder, int position) {
+    public void onBindViewHolder(ImageViewHodler holder, final int position) {
         Picasso.with(context).load(imgBeans.get(position).getIcon_url()).into(holder.imageView);
         holder.titleText.setText(imgBeans.get(position).getName());
-//       holder.imageView.setImageResource(R.mipmap.xxy03);
+        if (itemClickListener!=null){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    id = imgBeans.get(position).getId();
+                    itemClickListener.onClick(position);
 
+
+                }
+            });
+        }
+
+
+    }
+
+
+
+    public int getId() {
+
+        return id;
     }
 
     @Override
