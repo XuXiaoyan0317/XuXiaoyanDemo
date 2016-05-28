@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lanou3g.liwushuodemo.Bean.GiftDetilBean;
 import com.lanou3g.liwushuodemo.Bean.SelectBean;
 import com.lanou3g.liwushuodemo.R;
 import com.lanou3g.liwushuodemo.clickinterface.OnItemClickListener;
@@ -24,9 +25,24 @@ public class SelectAdaper extends RecyclerView.Adapter<SelectAdaper.SelectViewHo
     private Context context;
     private List<SelectBean.DataBean.ItemsBean> itemsBeens;
     private OnItemClickListener itemClickListener;
+    private List<GiftDetilBean.DataBean.ItemsBean> giftDetilBean;
+    private int flag=0;
+
+    public void setGiftDetilBean(List<GiftDetilBean.DataBean.ItemsBean> giftDetilBean) {
+        this.giftDetilBean = giftDetilBean;
+        notifyDataSetChanged();
+        Log.d("SelectAdaper", "收到了"+giftDetilBean);
+
+    }
 
     public void setItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
+        notifyDataSetChanged();
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+        Log.d("SelectAdaper", "flag:" + flag);
     }
 
     public SelectAdaper(Context context) {
@@ -43,16 +59,26 @@ public class SelectAdaper extends RecyclerView.Adapter<SelectAdaper.SelectViewHo
     public SelectViewHodler onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_select, parent, false);
         SelectViewHodler hodler = new SelectViewHodler(view);
-
-
         return hodler;
     }
 
     @Override
     public void onBindViewHolder(final SelectViewHodler holder, final int position) {
+        Log.d("SelectAdaper", "flag1:" + flag);
+        if (flag==0){
         Picasso.with(context).load(itemsBeens.get(position).getData().getCover_image_url()).into(holder.productImg);
         holder.productName.setText(itemsBeens.get(position).getData().getName());
         holder.productPrice.setText(itemsBeens.get(position).getData().getPrice());
+            Log.d("SelectAdaper", "flag2:" + flag);
+        }else {
+            Log.d("-------",giftDetilBean.get(position).getName());
+            Picasso.with(context).load(giftDetilBean.get(position).getCover_image_url()).into(holder.productImg);
+            holder.productName.setText(giftDetilBean.get(position).getName());
+            holder.productPrice.setText(giftDetilBean.get(position).getPrice());
+            Log.d("SelectAdaper", "flag3:" + flag);
+        }
+
+
 
         //holder.messageSize.setText(itemsBeens.get(position).getData().getFavorites_count());
         if (itemClickListener!=null){
@@ -68,7 +94,11 @@ public class SelectAdaper extends RecyclerView.Adapter<SelectAdaper.SelectViewHo
 
     @Override
     public int getItemCount() {
-        return itemsBeens == null ? 0 : itemsBeens.size();
+        if (flag==0) {
+            return itemsBeens == null ? 0 : itemsBeens.size();
+        }else {
+            return giftDetilBean==null?0:giftDetilBean.size();
+        }
     }
 
 

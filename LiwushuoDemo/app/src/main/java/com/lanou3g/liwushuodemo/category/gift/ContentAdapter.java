@@ -3,6 +3,7 @@ package com.lanou3g.liwushuodemo.category.gift;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +23,8 @@ import java.util.List;
  */
 public class ContentAdapter extends BaseAdapter {
     private List<GiftBean.DataBean.CategoriesBean> beanList;
-    private List<GiftBean.DataBean.CategoriesBean.SubcategoriesBean> contentBean;
-    //    ContentImageAdapter adapter;
-//    RelativeLayout rl;//带那条线的布局
+    private List<GiftBean.DataBean.CategoriesBean.SubcategoriesBean> contentBean = new ArrayList<>();
+    //    RelativeLayout rl;//带那条线的布局
     private ImageAdapter imageAdapter;
 
     public void setContentBean(List<GiftBean.DataBean.CategoriesBean> beanList) {
@@ -68,14 +68,17 @@ public class ContentAdapter extends BaseAdapter {
             //证明convertView不是新的
             //它已经注入布局,并且有holder
             //把convertView里的holder取出来
+
             holder = (ViewHolder) convertView.getTag();
         }
         //设置数据
         //从数据集合里渠道对应的position位置的数据
-        holder.tv.setText(beanList.get(position).getName());
-        contentBean = new ArrayList<>();
+        imageAdapter = new ImageAdapter(context);
+        holder.gridView.setAdapter(imageAdapter);
         contentBean = beanList.get(position).getSubcategories();
-       imageAdapter.setContentList(contentBean);
+        imageAdapter.setContentList(contentBean);
+        holder.tv.setText(beanList.get(position).getName());
+        Log.d("ContentAdapter", "position:" + position);
         return convertView;
 
 
@@ -85,7 +88,7 @@ public class ContentAdapter extends BaseAdapter {
     class ViewHolder {
         TextView tv;
         //        RecyclerView recyclerView;
-        GridView gridView;
+        NoScrollGridView gridView;
 
 
         //在这个ViewHolder的对象创建的时候对他内部保存的各个组件进行findviewbyid的操作
@@ -93,13 +96,11 @@ public class ContentAdapter extends BaseAdapter {
         //省略了不必要的findviewbyid操作
         public ViewHolder(View itemView) {
 
-            gridView = (GridView) itemView.findViewById(R.id.category_fragment_gift_content_gridview);
+            gridView = (NoScrollGridView) itemView.findViewById(R.id.category_fragment_gift_content_gridview);
 //            recyclerView = (RecyclerView) itemView.findViewById(R.id.category_fragment_gift_content_select_rv);
             tv = (TextView) itemView.findViewById(R.id.gift_tv);
-            imageAdapter = new ImageAdapter(context);
-            gridView.setAdapter(imageAdapter);
+
 //            rl = (RelativeLayout) itemView.findViewById(R.id.rv);
-//            adapter = new ContentImageAdapter(context);
 //            recyclerView.setLayoutManager(new GridLayoutManager(context,3));
 //            recyclerView.setAdapter(adapter);
 

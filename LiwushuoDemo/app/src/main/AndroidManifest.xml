@@ -22,6 +22,7 @@
         <activity android:name=".home.ImageDetilActivity"/>
         <activity android:name=".home.ListDetilActivity"/>
         <activity android:name=".home.ImageWebActivity"/>
+        <activity android:name=".category.gift.GiftDetilActivity"/>
 
     </application>
 

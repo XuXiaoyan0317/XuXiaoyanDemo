@@ -47,7 +47,6 @@ public class SelectFragment extends BaseFragment implements OnItemClickListener{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
                     }
                 },SelectBean.class,new Response.Listener<SelectBean>(){
                     @Override

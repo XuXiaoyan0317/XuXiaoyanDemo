@@ -36,6 +36,7 @@ public class SelectDetilActivity extends BaseActivity {
         webView.setWebViewClient(new MyWebViewClient());
         webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         webView.loadUrl(intent.getStringExtra("selectPath"));
+        webView.loadUrl(intent.getStringExtra("getPurchasePath"));
 
 
     }
